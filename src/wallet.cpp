@@ -29,6 +29,12 @@ struct CompareValueOnly
     }
 };
 
+struct CompareTimeOnly {
+    bool operator() (const CWalletTx * w1, const CWalletTx * w2) {
+        return w1->nTimeReceived < w2->nTimeReceived;
+    }
+  };
+  
 CPubKey CWallet::GenerateNewKey()
 {
     bool fCompressed = CanSupportFeature(FEATURE_COMPRPUBKEY); // default to compressed public keys if we want 0.6.0 wallets
@@ -892,19 +898,19 @@ void CWallet::ResendWalletTransactions()
     {
         LOCK(cs_wallet);
         // Sort them in chronological order
-        multimap<unsigned int, CWalletTx*> mapSorted;
+    vector<CWalletTx*> vectorSorted(mapWallet.size());
         BOOST_FOREACH(PAIRTYPE(const uint256, CWalletTx)& item, mapWallet)
         {
             CWalletTx& wtx = item.second;
             // Don't rebroadcast until it's had plenty of time that
             // it should have gotten in already by now.
             if (nTimeBestReceived - (int64)wtx.nTimeReceived > 5 * 60)
-                mapSorted.insert(make_pair(wtx.nTimeReceived, &wtx));
+                vectorSorted.push_back(&wtx);
         }
-        BOOST_FOREACH(PAIRTYPE(const unsigned int, CWalletTx*)& item, mapSorted)
+    sort(vectorSorted.begin(), vectorSorted.end(), CompareTimeOnly());
+        BOOST_FOREACH(CWalletTx* wtx, vectorSorted)
         {
-            CWalletTx& wtx = *item.second;
-            wtx.RelayWalletTransaction();
+            wtx->RelayWalletTransaction();
         }
     }
 }
