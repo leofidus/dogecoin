@@ -891,20 +891,16 @@ void CWallet::ResendWalletTransactions()
     printf("ResendWalletTransactions()\n");
     {
         LOCK(cs_wallet);
-        // Sort them in chronological order
-        multimap<unsigned int, CWalletTx*> mapSorted;
+
         BOOST_FOREACH(PAIRTYPE(const uint256, CWalletTx)& item, mapWallet)
         {
+            // Don't rebroadcast until we've given it plenty of time to show up.
+ 
             CWalletTx& wtx = item.second;
-            // Don't rebroadcast until it's had plenty of time that
-            // it should have gotten in already by now.
-            if (nTimeBestReceived - (int64)wtx.nTimeReceived > 5 * 60)
-                mapSorted.insert(make_pair(wtx.nTimeReceived, &wtx));
-        }
-        BOOST_FOREACH(PAIRTYPE(const unsigned int, CWalletTx*)& item, mapSorted)
-        {
-            CWalletTx& wtx = *item.second;
-            wtx.RelayWalletTransaction();
+            if (nTimeBestReceived - (int64)wtx.nTimeReceived > 10 * 60)
+            {
+                wtx.RelayWalletTransaction();
+            }
         }
     }
 }
