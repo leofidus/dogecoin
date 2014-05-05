@@ -20,5 +20,5 @@ script:
   - make -j 2
   - make check
 after_success:
-  - coveralls --gcov /usr/bin/gcov -x cpp --verbose | tail -n2000
+  - coveralls --gcov /usr/bin/gcov -x cpp --exclude src/json --exclude src/leveldb --exclude src/test --exclude src/qt/forms |tail -n2000
   
