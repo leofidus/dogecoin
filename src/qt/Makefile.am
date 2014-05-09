@@ -95,6 +95,7 @@ QT_FORMS_UI = \
   forms/openuridialog.ui \
   forms/optionsdialog.ui \
   forms/overviewpage.ui \
+  forms/paperwalletdialog.ui \
   forms/receivecoinsdialog.ui \
   forms/receiverequestdialog.ui \
   forms/rpcconsole.ui \
@@ -111,6 +112,7 @@ QT_MOC_CPP = \
   moc_bitcoinamountfield.cpp \
   moc_bitcoingui.cpp \
   moc_bitcoinunits.cpp \
+  moc_bitcoinprivkeyvalidator.cpp \
   moc_clientmodel.cpp \
   moc_coincontroldialog.cpp \
   moc_coincontroltreewidget.cpp \
@@ -126,6 +128,7 @@ QT_MOC_CPP = \
   moc_optionsdialog.cpp \
   moc_optionsmodel.cpp \
   moc_overviewpage.cpp \
+  moc_paperwalletdialog.cpp \
   moc_paymentserver.cpp \
   moc_qvalidatedlineedit.cpp \
   moc_qvaluecombobox.cpp \
@@ -173,6 +176,7 @@ BITCOIN_QT_H = \
   bitcoinamountfield.h \
   bitcoingui.h \
   bitcoinunits.h \
+  bitcoinprivkeyvalidator.h \
   clientmodel.h \
   coincontroldialog.h \
   coincontroltreewidget.h \
@@ -189,6 +193,7 @@ BITCOIN_QT_H = \
   optionsdialog.h \
   optionsmodel.h \
   overviewpage.h \
+  paperwalletdialog.h \
   paymentrequestplus.h \
   paymentserver.h \
   qvalidatedlineedit.h \
@@ -274,6 +279,7 @@ BITCOIN_QT_CPP = \
   bitcoinamountfield.cpp \
   bitcoingui.cpp \
   bitcoinunits.cpp \
+  bitcoinprivkeyvalidator.cpp \
   clientmodel.cpp \
   csvmodelwriter.cpp \
   guiutil.cpp \
@@ -300,6 +306,7 @@ BITCOIN_QT_CPP += \
   editaddressdialog.cpp \
   openuridialog.cpp \
   overviewpage.cpp \
+  paperwalletdialog.cpp \
   paymentrequestplus.cpp \
   paymentserver.cpp \
   receivecoinsdialog.cpp \
@@ -324,7 +331,9 @@ RES_IMAGES = \
   res/images/about.png \
   res/images/splash.png \
   res/images/splash_testnet.png \
-  res/images/wallet_bgcoin.png
+  res/images/wallet_bgcoin.png \
+  res/images/paperwallets/100_obverse.png \
+  res/images/paperwallets/100_reverse.png
 
 RES_MOVIES = $(wildcard res/movies/spinner-*.png)
 

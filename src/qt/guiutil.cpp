@@ -5,6 +5,7 @@
 #include "guiutil.h"
 
 #include "bitcoinaddressvalidator.h"
+#include "bitcoinprivkeyvalidator.h"
 #include "bitcoinunits.h"
 #include "qvalidatedlineedit.h"
 #include "walletmodel.h"
@@ -90,6 +91,18 @@ void setupAddressWidget(QValidatedLineEdit *widget, QWidget *parent)
 #endif
     widget->setValidator(new BitcoinAddressEntryValidator(parent));
     widget->setCheckValidator(new BitcoinAddressCheckValidator(parent));
+}
+
+void setupPrivKeyWidget(QValidatedLineEdit *widget, QWidget *parent)
+{
+    parent->setFocusProxy(widget);
+
+    widget->setFont(bitcoinAddressFont());
+#if QT_VERSION >= 0x040700
+    widget->setPlaceholderText(QObject::tr("Enter a Dogecoin private key (e.g. 6KjqcMePv3F7H6zHQepXZu98bnb2je8as3mzqEtF9Ap8GfdSmm6)"));
+#endif
+    widget->setValidator(new BitcoinAddressEntryValidator(parent));
+    widget->setCheckValidator(new BitcoinPrivKeyCheckValidator(parent));
 }
 
 void setupAmountWidget(QLineEdit *widget, QWidget *parent)

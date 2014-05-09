@@ -133,6 +133,9 @@ public:
 
     // Check address for validity
     bool validateAddress(const QString &address);
+    
+    /// Check private key for validity
+    bool validatePrivKey(const QString &key);
 
     // Return status record for SendCoins, contains error id + information
     struct SendCoinsReturn

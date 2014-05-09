@@ -150,6 +150,19 @@ bool WalletModel::validateAddress(const QString &address)
     return addressParsed.IsValid();
 }
 
+bool WalletModel::validatePrivKey(const QString &key)
+{
+    CBitcoinSecret vchSecret;
+    bool fGood = vchSecret.SetString(key.toStdString());
+
+    if (!fGood) return false;
+    
+    CKey pkey = vchSecret.GetKey();
+    if (!pkey.IsValid()) return false;
+    
+    return true;
+}
+
 WalletModel::SendCoinsReturn WalletModel::prepareTransaction(WalletModelTransaction &transaction, const CCoinControl *coinControl)
 {
     qint64 total = 0;

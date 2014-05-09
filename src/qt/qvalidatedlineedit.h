@@ -18,6 +18,7 @@ public:
     explicit QValidatedLineEdit(QWidget *parent);
     void clear();
     void setCheckValidator(const QValidator *v);
+    bool isValid();
 
 protected:
     void focusInEvent(QFocusEvent *evt);
@@ -26,6 +27,7 @@ protected:
 private:
     bool valid;
     const QValidator *checkValidator;
+    QString lastCheckedValue;
 
 public slots:
     void setValid(bool valid);

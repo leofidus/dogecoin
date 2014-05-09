@@ -85,6 +85,10 @@ void QValidatedLineEdit::checkValidity()
     else if (hasAcceptableInput())
     {
         setValid(true);
+        
+        if(text() == lastCheckedValue)
+            return;
+        lastCheckedValue = text();
 
         // Check contents on focus out
         if (checkValidator)
@@ -104,4 +108,11 @@ void QValidatedLineEdit::checkValidity()
 void QValidatedLineEdit::setCheckValidator(const QValidator *v)
 {
     checkValidator = v;
+}
+
+bool QValidatedLineEdit::isValid()
+{
+    if(text() != lastCheckedValue)
+        checkValidity();
+    return this->valid;
 }

@@ -16,6 +16,7 @@ FORMS += \
     ../src/qt/forms/sendcoinsentry.ui \
     ../src/qt/forms/signverifymessagedialog.ui \
     ../src/qt/forms/transactiondescdialog.ui \
+    ../src/qt/forms/paperwalletdialog.ui
 
 RESOURCES += \
     ../src/qt/dogecoin.qrc
@@ -200,7 +201,8 @@ HEADERS += \
     ../src/util.h \
     ../src/version.h \
     ../src/wallet.h \
-    ../src/walletdb.h
+    ../src/walletdb.h \
+    ../src/qt/paperwalletdialog.h
 
 SOURCES += \
     ../src/json/json_spirit_reader.cpp \
@@ -449,4 +451,5 @@ SOURCES += \
     ../src/version.cpp \
     ../src/wallet.cpp \
     ../src/walletdb.cpp \
-    ../src/leveldb/db/c_test.c
+    ../src/leveldb/db/c_test.c \
+    ../src/qt/paperwalletdialog.cpp
