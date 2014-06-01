@@ -49,6 +49,7 @@
         <file alias="wallet_bgcoin">res/images/wallet_bgcoin.png</file>
         <file alias="paperwallets/100_obverse">res/images/paperwallets/100_obverse.png</file>
         <file alias="paperwallets/100_reverse">res/images/paperwallets/100_reverse.png</file>
+        
     </qresource>
     <qresource prefix="/movies">
         <file alias="spinner-000">res/movies/spinner-000.png</file>
@@ -167,5 +168,7 @@
         <file alias="ComicNeue-Light-Oblique">res/fonts/ComicNeue-Light-Oblique.ttf</file>
         <file alias="ComicNeue-Regular">res/fonts/ComicNeue-Regular.ttf</file>
         <file alias="ComicNeue-Regular-Oblique">res/fonts/ComicNeue-Regular-Oblique.ttf</file>
+        <file alias="Computer7">res/fonts/computer_7.ttf</file>
+        <file alias="Inconsolata">res/fonts/Inconsolata.otf</file>
     </qresource>
 </RCC>

@@ -292,11 +292,24 @@ void PaperWalletDialog::createWallets() {
         secret.MakeNewKey(true); //make compressed key
     }
     CPubKey pubkey = secret.GetPubKey();
-    CBitcoinSecret(secret).ToString();
-    CBitcoinAddress(pubkey.GetID()).ToString();
-    painter.drawText(126, 172, QString::fromStdString(CBitcoinAddress(pubkey.GetID()).ToString()));
-    painter.drawText(126, 320, QString::fromStdString(CBitcoinSecret(secret).ToString()));
+    const std::string sSecret = CBitcoinSecret(secret).ToString();
+    const std::string sPublic = CBitcoinAddress(pubkey.GetID()).ToString();
 
+    QFont addressFont(QString("Inconsolata"), 45);
+    addressFont.setBold(true);
+    addressFont.setStretch(QFont::UltraCondensed);
+
+    painter.setFont(addressFont);
+    painter.drawText(106, 172, QString::fromStdString(sPublic));
+    painter.drawText(106, 320, QString::fromStdString(sSecret));
+
+    QFont hintFont(QString("Comic Sans MS"), 25);
+    hintFont.setBold(true);
+    hintFont.setStretch(QFont::Condensed);
+
+    painter.setFont(hintFont);
+    painter.drawText(114, 219, QString("Verify Balance by searching for the public address on dogechain.info"));
+    painter.drawText(114, 365, QString("Dogecoin -> Paper Wallet"));
     wallet.save("test.png", "PNG");
 }
 

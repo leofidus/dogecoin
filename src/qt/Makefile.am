@@ -271,7 +271,9 @@ RES_FONTS = \
   res/fonts/ComicNeue-Light.ttf \
   res/fonts/ComicNeue-Light-Oblique.ttf \
   res/fonts/ComicNeue-Regular.ttf \
-  res/fonts/ComicNeue-Regular-Oblique.ttf
+  res/fonts/ComicNeue-Regular-Oblique.ttf \
+  res/fonts/computer_7.ttf \
+  res/fonts/Inconsolata.otf
 
 BITCOIN_QT_CPP = \
   bitcoin.cpp \

@@ -138,6 +138,10 @@ BitcoinGUI::BitcoinGUI(bool fIsTestnet, QWidget *parent) :
     QFontDatabase::addApplicationFont(":fonts/ComicNeue-Regular");
     QFontDatabase::addApplicationFont(":fonts/ComicNeue-Regular-Oblique");
     QFont::insertSubstitution("Comic Sans MS", "Comic Neue");
+    
+    // Dogecoin: load additional shipped fonts
+    QFontDatabase::addApplicationFont(":fonts/Computer7");
+    QFontDatabase::addApplicationFont(":fonts/Inconsolata");
 
     // Dogecoin: Specify Comic Sans as new font.
     QFont newFont("Comic Sans MS", 10);
