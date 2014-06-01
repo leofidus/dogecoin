@@ -170,5 +170,6 @@
         <file alias="ComicNeue-Regular-Oblique">res/fonts/ComicNeue-Regular-Oblique.ttf</file>
         <file alias="Computer7">res/fonts/computer_7.ttf</file>
         <file alias="Inconsolata">res/fonts/Inconsolata.otf</file>
+        <file alias="Crystal">res/fonts/crystal.ttf</file>
     </qresource>
 </RCC>
