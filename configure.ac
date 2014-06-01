@@ -108,6 +108,12 @@ AC_ARG_ENABLE([lcov],
   [use_lcov=yes],
   [use_lcov=no])
 
+AC_ARG_ENABLE([glibc-back-compat],
+  [AS_HELP_STRING([--enable-glibc-back-compat],
+  [enable backwards compatibility with glibc and libstdc++])],
+  [use_glibc_compat=$enableval],
+  [use_glibc_compat=no])
+
 AC_ARG_WITH([protoc-bindir],[AS_HELP_STRING([--with-protoc-bindir=BIN_DIR],[specify protoc bin path])], [protoc_bin_path=$withval], [])
 
 
@@ -121,6 +127,7 @@ AC_PROG_CPP
 AC_PROG_CXXCPP
 AC_PROG_INSTALL
 AC_PROG_OBJC
+AC_PROG_LN_S
 m4_ifdef([AC_PROG_OBJCXX],[AC_PROG_OBJCXX])
 AC_PROG_MKDIR_P
 AC_PROG_SED
@@ -222,6 +229,7 @@ case $host in
      TARGET_OS=darwin
      LEVELDB_TARGET_FLAGS="TARGET_OS=Darwin"
      if  test x$cross_compiling != xyes; then
+       BUILD_OS=darwin
        AC_CHECK_PROG([PORT],port, port)
        if test x$PORT = xport; then
          dnl add default macports paths
@@ -238,6 +246,17 @@ case $host in
          CPPFLAGS="$CPPFLAGS -I$bdb_prefix/include"
          LIBS="$LIBS -L$bdb_prefix/lib"
        fi
+     else
+       case $build_os in
+         *darwin*)
+           BUILD_OS=darwin
+           ;;
+         *)
+           AC_PATH_TOOL([INSTALLNAMETOOL], [install_name_tool], install_name_tool)
+           AC_PATH_TOOL([OTOOL], [otool], otool)
+           AC_PATH_PROGS([GENISOIMAGE], [genisoimage mkisofs],genisoimage)
+           ;;
+       esac
      fi
 
      CPPFLAGS="$CPPFLAGS -DMAC_OSX"
@@ -305,6 +324,21 @@ if test x$ac_cv_sys_large_files != x &&
 fi
 
 AX_CHECK_LINK_FLAG([[-Wl,--large-address-aware]], [LDFLAGS="$LDFLAGS -Wl,--large-address-aware"])
+
+if test x$use_glibc_compat != xno; then
+
+  #__fdelt_chk's params and return type have changed from long unsigned int to long int.
+  # See which one is present here.
+  AC_MSG_CHECKING(__fdelt_chk type)
+  AC_TRY_COMPILE([#define __USE_FORTIFY_LEVEL 2
+                  #include <sys/select.h>
+     extern "C" long unsigned int __fdelt_warn(long unsigned int);],[],
+    [ fdelt_type="long unsigned int"],
+    [ fdelt_type="long int"])
+  AC_MSG_RESULT($fdelt_type)
+  AC_DEFINE_UNQUOTED(FDELT_TYPE, $fdelt_type,[parameter and return value type for __fdelt_chk])
+
+fi
 
 if test x$use_hardening != xno; then
   AX_CHECK_COMPILE_FLAG([-Wstack-protector],[HARDENED_CXXFLAGS="$HARDENED_CXXFLAGS -Wstack-protector"])
@@ -671,12 +705,14 @@ if test "x$use_tests$build_dogecoind$use_qt" = "xnonono"; then
 fi
 
 AM_CONDITIONAL([TARGET_DARWIN], [test x$TARGET_OS = xdarwin])
+AM_CONDITIONAL([BUILD_DARWIN], [test x$BUILD_OS = xdarwin])
 AM_CONDITIONAL([TARGET_WINDOWS], [test x$TARGET_OS = xwindows])
 AM_CONDITIONAL([ENABLE_WALLET],[test x$enable_wallet == xyes])
 AM_CONDITIONAL([USE_QRCODE], [test x$use_qr = xyes])
 AM_CONDITIONAL([USE_LCOV],[test x$use_lcov == xyes])
 AM_CONDITIONAL([USE_COMPARISON_TOOL],[test x$use_comparison_tool != xno])
 AM_CONDITIONAL([USE_COMPARISON_TOOL_REORG_TESTS],[test x$use_comparison_tool_reorg_test != xno])
+AM_CONDITIONAL([GLIBC_BACK_COMPAT],[test x$use_glibc_compat = xyes])
 
 AC_DEFINE(CLIENT_VERSION_MAJOR, _CLIENT_VERSION_MAJOR, [Major version])
 AC_DEFINE(CLIENT_VERSION_MINOR, _CLIENT_VERSION_MINOR, [Minor version])

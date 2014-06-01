@@ -32,6 +32,7 @@
 #include <QDateTime>
 #include <QDesktopWidget>
 #include <QDragEnterEvent>
+#include <QFontDatabase>
 #include <QIcon>
 #include <QLabel>
 #include <QListWidget>
@@ -128,6 +129,15 @@ BitcoinGUI::BitcoinGUI(bool fIsTestnet, QWidget *parent) :
          */
         setCentralWidget(rpcConsole);
     }
+    
+    // Dogecoin: load fallback font in case Comic Sans is not availble on the system
+    QFontDatabase::addApplicationFont(":fonts/ComicNeue-Bold");
+    QFontDatabase::addApplicationFont(":fonts/ComicNeue-Bold-Oblique");
+    QFontDatabase::addApplicationFont(":fonts/ComicNeue-Light");
+    QFontDatabase::addApplicationFont(":fonts/ComicNeue-Light-Oblique");
+    QFontDatabase::addApplicationFont(":fonts/ComicNeue-Regular");
+    QFontDatabase::addApplicationFont(":fonts/ComicNeue-Regular-Oblique");
+    QFont::insertSubstitution("Comic Sans MS", "Comic Neue");
 
     // Dogecoin: Specify Comic Sans as new font.
     QFont newFont("Comic Sans MS", 10);
@@ -679,17 +689,27 @@ void BitcoinGUI::setNumBlocks(int count, int nTotalBlocks)
     {
         // Represent time from last generated block in human readable text
         QString timeBehindText;
-        if(secs < 48*60*60)
+        const int HOUR_IN_SECONDS = 60*60;
+        const int DAY_IN_SECONDS = 24*60*60;
+        const int WEEK_IN_SECONDS = 7*24*60*60;
+        const int YEAR_IN_SECONDS = 31556952; // Average length of year in Gregorian calendar
+        if(secs < 2*DAY_IN_SECONDS)
         {
-            timeBehindText = tr("%n hour(s)","",secs/(60*60));
+            timeBehindText = tr("%n hour(s)","",secs/HOUR_IN_SECONDS);
         }
-        else if(secs < 14*24*60*60)
+        else if(secs < 2*WEEK_IN_SECONDS)
         {
-            timeBehindText = tr("%n day(s)","",secs/(24*60*60));
+            timeBehindText = tr("%n day(s)","",secs/DAY_IN_SECONDS);
+        }
+        else if(secs < YEAR_IN_SECONDS)
+        {
+            timeBehindText = tr("%n week(s)","",secs/WEEK_IN_SECONDS);
         }
         else
         {
-            timeBehindText = tr("%n week(s)","",secs/(7*24*60*60));
+            int years = secs / YEAR_IN_SECONDS;
+            int remainder = secs % YEAR_IN_SECONDS;
+            timeBehindText = tr("%1 and %2").arg(tr("%n year(s)", "", years)).arg(tr("%n week(s)","", remainder/WEEK_IN_SECONDS));
         }
 
         progressBarLabel->setVisible(true);
